@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Train Model
+Bundle-SymbolicName: com.eclipsesource.train.dashboard.model
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: EclipseSource
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: com.eclipsesource.train.dashboard.model;version="1.0.0"
+Bundle-ActivationPolicy: lazy

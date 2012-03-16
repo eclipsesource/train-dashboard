@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Train Dashboard
+Bundle-SymbolicName: com.eclipsesource.train.dashboard
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: EclipseSource
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Service-Component: OSGI-INF/aggregator.xml
+Import-Package: com.eclipsesource.train.dashboard.model;version="[1.0.0,1.1.0)",
+ com.google.gson;version="[2.1.0,2.2.0)",
+ com.google.gson.stream;version="[2.1.0,2.2.0)"
+Export-Package: com.eclipsesource.train.dashboard;version="1.0.0";uses:="com.eclipsesource.train.dashboard.model"
+Bundle-ActivationPolicy: lazy
