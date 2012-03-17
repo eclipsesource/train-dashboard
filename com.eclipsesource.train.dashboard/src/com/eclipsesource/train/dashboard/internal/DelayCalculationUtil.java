@@ -188,7 +188,7 @@ public class DelayCalculationUtil {
   }
   
   public static <T> List<T> reduceList( List<T> list, int expectedSize ) {
-    if( expectedSize < 0 ) {
+    if( expectedSize < 0 || list.size() <= expectedSize ) {
       return new ArrayList<T>( list );
     }
     ArrayList<T> result = new ArrayList<T>();
