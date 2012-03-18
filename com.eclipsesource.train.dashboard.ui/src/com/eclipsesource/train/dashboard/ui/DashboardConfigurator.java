@@ -17,6 +17,6 @@ import org.eclipse.rwt.application.ApplicationConfigurator;
 public class DashboardConfigurator implements ApplicationConfigurator {
 
   public void configure( ApplicationConfiguration configuration ) {
-    configuration.addEntryPoint( "/dashboard", EntryPoint.class );
+    configuration.addEntryPoint( "/dashboard", EntryPoint.class, null );
   }
 }
