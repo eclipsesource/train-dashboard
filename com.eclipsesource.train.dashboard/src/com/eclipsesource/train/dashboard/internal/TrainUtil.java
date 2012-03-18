@@ -35,4 +35,8 @@ public class TrainUtil {
     }
     return result;
   }
+  
+  private TrainUtil() {
+    // prevent instantiation
+  }
 }

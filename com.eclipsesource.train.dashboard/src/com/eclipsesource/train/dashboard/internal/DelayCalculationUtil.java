@@ -205,4 +205,8 @@ public class DelayCalculationUtil {
     }
     return result;
   }
+  
+  private DelayCalculationUtil() {
+    // prevent instantiation
+  }
 }
