@@ -11,47 +11,38 @@
 package com.eclipsesource.train.dashboard.internal;
 
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.eclipsesource.train.dashboard.DashboardAggregator;
-import com.eclipsesource.train.dashboard.DelayInfo;
-import com.eclipsesource.train.dashboard.model.Station;
-import com.eclipsesource.train.dashboard.model.Train;
+import com.eclipsesource.train.dashboard.RailwayInfo;
 
 
+// Exists only once because it's an OSGi service
 public class DashboardAggregatorImpl implements DashboardAggregator {
   
+  private Map<TrainServiceKey, RailwayInfo> infoCache;
   
-  private DelayInfo delayInfo;
-
   public DashboardAggregatorImpl() {
-    delayInfo = new DelayInfoImpl();
+    infoCache = new HashMap<TrainServiceKey, RailwayInfo>();
   }
 
-  public List<Station> getAllStations() {
-    return FetchFactory.getStations();
-  }
-  
-  public Station getStationById( int id ) {
-    return DelayCalculationUtil.getStationById( id );
-  }
-  
-  public List<Train> getTrainsForDate( Date date ) {
-    return FetchFactory.getTrains( date );
-  }
-  
-  public Train getTrainByNr( Date date, String trainNr ) {
-    List<Train> trains = getTrainsForDate( date );
-    for( Train train : trains ) {
-      if( train.getTrainNr().equals( trainNr ) ) {
-        return train;
-      }
+  public RailwayInfo getInfoForDate( Date date ) {
+    TrainServiceKey key = new TrainServiceKey( date );
+    RailwayInfo result = infoCache.get( key );
+    if( result == null ) {
+      result = createRailwayInfo( date, key );
+    } else if( TrainUtil.isToOld( date ) ) {
+      infoCache.remove( key );
+      result = createRailwayInfo( date, key );
     }
-    return null;
+    return result;
   }
-  
-  public DelayInfo getDelayInfo() {
-    return delayInfo;
+
+  private RailwayInfo createRailwayInfo( Date date, TrainServiceKey key ) {
+    RailwayInfo result = new RailwayInfoImpl( date );
+    infoCache.put( key, result );
+    return result;
   }
   
 }

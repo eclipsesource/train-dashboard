@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.eclipsesource.train.dashboard;
 
-import java.util.Date;
 import java.util.List;
 
 import com.eclipsesource.train.dashboard.model.Station;
@@ -18,29 +17,29 @@ import com.eclipsesource.train.dashboard.model.Station;
 
 public interface DelayInfo {
 
-  List<Station> getStationsSortedByDelayAmount( Date date );
+  List<Station> getStationsSortedByDelayAmount();
 
-  List<Station> getStationsSortedByDelayAmount( Date date, int maxSize );
+  List<Station> getStationsSortedByDelayAmount(int maxSize );
 
-  int getDelayAmountForStation( int stationId, Date date );
+  int getDelayAmountForStation( int stationId );
 
-  List<Station> getStationsSortedByDelayMinutes( Date date );
+  List<Station> getStationsSortedByDelayMinutes();
 
-  List<Station> getStationsSortedByDelayMinutes( Date date, int maxSize );
+  List<Station> getStationsSortedByDelayMinutes( int maxSize );
 
-  int getDelayMinutesForStation( int stationId, Date date );
+  int getDelayMinutesForStation( int stationId );
 
-  List<Station> getStationsSortedByDelayPercentage( Date date );
+  List<Station> getStationsSortedByDelayPercentage();
 
-  List<Station> getStationsSortedByDelayPercentage( Date date, int maxSize );
+  List<Station> getStationsSortedByDelayPercentage( int maxSize );
 
-  double getDelayPercentageForStation( int stationId, Date date );
+  double getDelayPercentageForStation( int stationId );
 
-  int getAvarageDelayMinutes( Date date );
+  int getAvarageDelayMinutes();
 
-  int getMaximumDelayMinutes( Date date );
+  int getMaximumDelayMinutes();
 
-  int getDelayedTrainsAmount( Date date, int minDelay );
+  int getDelayedTrainsAmount(int minDelay );
 
-  double getDelayedTrainsPercentage( Date date, int minDelay );
+  double getDelayedTrainsPercentage( int minDelay );
 }

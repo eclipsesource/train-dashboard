@@ -16,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +27,6 @@ import com.eclipsesource.train.dashboard.model.Train;
 
 public class FetchFactory {
   
-  private static final int MAX_AGE_OF_TODAYS_TRAINS_IN_MINUTES = 30;
   private static final String REST_API_HOST = "http://zugmonitor.sueddeutsche.de/api";
   private static final String DATA_LOCATION_PROPERTY = "com.eclipsesource.train.dashboard.data.location";
   
@@ -61,7 +59,7 @@ public class FetchFactory {
     List<Train> result = trainCache.get( key );
     File dataFolder = getDataFolder();
     File trainFile = new File( dataFolder.getPath() + File.separator + key.toString() + ".json" );
-    if( trainFileIsToOld( trainFile, key ) || result == null ) {
+    if( trainFileIsToOld( trainFile, date ) || result == null ) {
       result = fetchTrainsFromResource( key, trainFile );
     }
     return result;
@@ -87,19 +85,13 @@ public class FetchFactory {
     return ensureDataFolderExist( dataLocationPath );
   }
 
-  private static boolean trainFileIsToOld( File trainFile, TrainServiceKey key ) {
+  private static boolean trainFileIsToOld( File trainFile, Date date ) {
     boolean result = false;
-    Date today = new Date();
-    if( key.equals( new TrainServiceKey( today ) ) ) {
-      long lastModifiedMinutes = ( trainFile.lastModified() / 1000 ) / 60;
-      Calendar calendar = Calendar.getInstance();
-      calendar.setTime( today );
-      long todayInMinutes = ( calendar.getTimeInMillis() / 1000 ) / 60;
-      if( ( todayInMinutes - lastModifiedMinutes ) > MAX_AGE_OF_TODAYS_TRAINS_IN_MINUTES ) {
-        trainFile.delete();
-        trainCache.remove( key );
-        result = true;
-      }
+    Date trainFileDate = new Date( trainFile.lastModified() );
+    if( TrainUtil.isToOld( date ) || TrainUtil.isToOld( trainFileDate ) ) {
+      trainFile.delete();
+      trainCache.remove( date );
+      result = true;
     }
     return result;
   }

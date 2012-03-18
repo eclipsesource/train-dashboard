@@ -10,11 +10,21 @@
  ******************************************************************************/
 package com.eclipsesource.train.dashboard;
 
-import java.util.Date;
+import java.util.List;
+
+import com.eclipsesource.train.dashboard.model.Station;
+import com.eclipsesource.train.dashboard.model.Train;
 
 
-public interface DashboardAggregator {
-
-  RailwayInfo getInfoForDate( Date date );
+public interface RailwayInfo {
   
+  List<Station> getAllStations();
+
+  Station getStationById( int id );
+
+  List<Train> getAllTrains();
+
+  Train getTrainByNr( String trainNr );
+
+  DelayInfo getDelayInfo();
 }
