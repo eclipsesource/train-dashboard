@@ -7,7 +7,10 @@ After cloning this repository and importing the project into your Eclipse worksp
 * **com.eclipsesource.train.dashboard.data.location** (String) Needs to be a writable folder location to store the train data in. 
 * **com.eclipsesource.train.dashboard.max.age** (int) Defines the maximum age of today's data because it can change during the day.
 
-After this you can launch the application busing the *RAP Mobile Dashboard.launch* launch configuration file located in the *com.eclipsesource.train.dashboard.ui* project.
+After this you can launch the application busing the *RAP Mobile Dashboard.launch* launch configuration file located in the *com.eclipsesource.train.dashboard.ui* project. 
+
+**Download the nightly build**
+A nightly build of the train dashboard demo can be downloaded as war file from [here](http://download.eclipsesource.com/build/rap-mobile/train.war).
 
 **License**  
 All files are licensed under the [Eclipse Public License - v 1.0](http://www.eclipse.org/legal/epl-v10.html)
