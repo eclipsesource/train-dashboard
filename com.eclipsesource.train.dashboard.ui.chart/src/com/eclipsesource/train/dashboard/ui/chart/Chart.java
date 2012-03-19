@@ -90,7 +90,7 @@ public class Chart extends Composite {
 			FormData lblFormdata = new FormData();
 			lblFormdata.left = new FormAttachment( left );
 			lblFormdata.right = new FormAttachment( right );
-			lblFormdata.bottom = new FormAttachment( barComposites.get( i ), 5, SWT.TOP );
+			lblFormdata.bottom = new FormAttachment( barComposites.get( i ), -5, SWT.TOP );
 			Label value = values.get( i );
 			value.setLayoutData( lblFormdata );
 			value.setText( bar.getText() );
