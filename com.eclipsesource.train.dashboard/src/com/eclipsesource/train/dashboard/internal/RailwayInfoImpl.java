@@ -23,6 +23,8 @@ public class RailwayInfoImpl implements RailwayInfo {
   
   private DelayInfo delayInfo;
   private final Date date;
+  private List<Station> stations;
+  private final Object lock = new Object();
 
   public RailwayInfoImpl( Date date ) {
     this.date = date;
@@ -30,7 +32,12 @@ public class RailwayInfoImpl implements RailwayInfo {
   }
 
   public List<Station> getAllStations() {
-    return FetchFactory.getStations();
+    synchronized( lock ) {
+      if( stations == null ) {
+        stations = FetchFactory.getStations();
+      }
+      return stations;
+    }
   }
   
   public Station getStationById( int id ) {

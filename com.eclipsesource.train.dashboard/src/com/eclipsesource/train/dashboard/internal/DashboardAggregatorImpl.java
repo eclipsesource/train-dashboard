@@ -11,8 +11,7 @@
 package com.eclipsesource.train.dashboard.internal;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.eclipsesource.train.dashboard.DashboardAggregator;
 import com.eclipsesource.train.dashboard.RailwayInfo;
@@ -21,10 +20,10 @@ import com.eclipsesource.train.dashboard.RailwayInfo;
 // Exists only once because it's an OSGi service
 public class DashboardAggregatorImpl implements DashboardAggregator {
   
-  private Map<TrainServiceKey, RailwayInfo> infoCache;
+  private ConcurrentHashMap<TrainServiceKey, RailwayInfo> infoCache;
   
   public DashboardAggregatorImpl() {
-    infoCache = new HashMap<TrainServiceKey, RailwayInfo>();
+    infoCache = new ConcurrentHashMap<TrainServiceKey, RailwayInfo>();
   }
 
   public RailwayInfo getInfoForDate( Date date ) {
@@ -41,7 +40,10 @@ public class DashboardAggregatorImpl implements DashboardAggregator {
 
   private RailwayInfo createRailwayInfo( Date date, TrainServiceKey key ) {
     RailwayInfo result = new RailwayInfoImpl( date );
-    infoCache.put( key, result );
+    RailwayInfo putResult = infoCache.putIfAbsent( key, result );
+    if( putResult != null ) {
+      result = putResult;
+    }
     return result;
   }
   

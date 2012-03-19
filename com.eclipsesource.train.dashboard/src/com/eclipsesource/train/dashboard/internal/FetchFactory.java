@@ -17,9 +17,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.eclipsesource.train.dashboard.model.Station;
 import com.eclipsesource.train.dashboard.model.Train;
@@ -30,8 +29,9 @@ public class FetchFactory {
   private static final String REST_API_HOST = "http://zugmonitor.sueddeutsche.de/api";
   private static final String DATA_LOCATION_PROPERTY = "com.eclipsesource.train.dashboard.data.location";
   
-  private static Map<TrainServiceKey, List<Train>> trainCache = new HashMap<TrainServiceKey, List<Train>>();
-  private static List<Station> stations;
+  private static ConcurrentHashMap<TrainServiceKey, List<Train>> trainCache 
+    = new ConcurrentHashMap<TrainServiceKey, List<Train>>();
+  private static volatile List<Station> stations;
   
   public static List<Station> getStations() {
     if( stations == null ) {
@@ -73,7 +73,10 @@ public class FetchFactory {
     Deserializer deserializer = new Deserializer();
     try {
       result = deserializer.getTrains( new FileInputStream( trainFile ) );
-      trainCache.put( key, result );
+      List<Train> putResult = trainCache.putIfAbsent( key, result );
+      if( putResult != null ) {
+        result = putResult;
+      }
     } catch( FileNotFoundException shouldNotHappen ) {
       throw new IllegalStateException( "Could not read file " + trainFile.getAbsolutePath() );
     }
