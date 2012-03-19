@@ -18,13 +18,28 @@ import com.eclipsesource.train.dashboard.model.Train;
 
 public interface RailwayInfo {
   
+  /**
+   * Returns all stations. Not date specific!
+   */
   List<Station> getAllStations();
 
+  /**
+   * Returns a {@link Station} object for a given id. Not date specific!
+   */
   Station getStationById( int id );
 
+  /**
+   * Returns all trains for the date used in {@link DashboardAggregator}.
+   */
   List<Train> getAllTrains();
 
+  /**
+   * Returns a train by a given number for the date used in {@link DashboardAggregator}.
+   */
   Train getTrainByNr( String trainNr );
 
+  /**
+   * Returns a {@link DelayInfo} object for the date used in {@link DashboardAggregator}.
+   */
   DelayInfo getDelayInfo();
 }

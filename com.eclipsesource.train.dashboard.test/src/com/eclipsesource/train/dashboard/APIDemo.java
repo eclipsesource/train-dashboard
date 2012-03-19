@@ -54,7 +54,7 @@ public class APIDemo {
   }
 
   private static void printDelayInfo( Date date, DelayInfo delayInfo ) {
-    System.out.println( "Avarage Delay in minutes: " + delayInfo.getAvarageDelayMinutes() );
+    System.out.println( "Avarage Delay in minutes: " + delayInfo.getAverageDelayMinutes() );
     System.out.println( "Maximum Delay in minutes: " + delayInfo.getMaximumDelayMinutes() );
     System.out.println( "Trains with min. delay = 5min: " + delayInfo.getDelayedTrainsAmount( 5 ) );
     System.out.println( "Trains with min. delay = 10min: " + delayInfo.getDelayedTrainsAmount( 10 ) );

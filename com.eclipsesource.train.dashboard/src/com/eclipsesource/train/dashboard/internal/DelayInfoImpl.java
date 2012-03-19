@@ -192,7 +192,7 @@ public class DelayInfoImpl implements DelayInfo {
     return result.doubleValue();
   }
   
-  public int getAvarageDelayMinutes() {
+  public int getAverageDelayMinutes() {
     synchronized( lock ) {
       if( avarageDelayMinutes == DEFAULT_VALUE ) {
         createAvarageDelayMinutes();

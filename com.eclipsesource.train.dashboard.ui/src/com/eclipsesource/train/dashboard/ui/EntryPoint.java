@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.eclipsesource.train.dashboard.ui;
 
+import java.util.Date;
+
 import org.eclipse.rwt.lifecycle.IEntryPoint;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -17,6 +19,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+
+import com.eclipsesource.train.dashboard.DashboardAggregator;
+import com.eclipsesource.train.dashboard.RailwayInfo;
 
 
 public class EntryPoint implements IEntryPoint {
@@ -26,9 +31,12 @@ public class EntryPoint implements IEntryPoint {
     Shell shell = new Shell( display );
     shell.setLayout( new GridLayout( 1, false ) );
     
+    DashboardAggregator aggregator = Activator.getAggregator();
+    RailwayInfo info = aggregator.getInfoForDate( new Date() );
+    
     Label label = new Label( shell, SWT.NONE );
     label.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
-    label.setText( "Hall Jordi" );
+    label.setText( "Maximum Delay Time (min) " + info.getDelayInfo().getMaximumDelayMinutes() );
     
     
     shell.setMaximized( true );
