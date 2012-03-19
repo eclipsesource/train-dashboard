@@ -9,7 +9,7 @@ After cloning this repository and importing the project into your Eclipse worksp
 
 After this you can launch the application busing the *RAP Mobile Dashboard.launch* launch configuration file located in the *com.eclipsesource.train.dashboard.ui* project. 
 
-**Download the nightly build**
+**Download the nightly build**  
 A nightly build of the train dashboard demo can be downloaded as war file from [here](http://download.eclipsesource.com/build/rap-mobile/train.war).
 
 **License**  
