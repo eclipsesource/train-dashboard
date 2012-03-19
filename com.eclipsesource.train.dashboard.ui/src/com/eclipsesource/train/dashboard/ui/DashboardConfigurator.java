@@ -18,5 +18,6 @@ public class DashboardConfigurator implements ApplicationConfigurator {
 
   public void configure( ApplicationConfiguration configuration ) {
     configuration.addEntryPoint( "/dashboard", EntryPoint.class, null );
+    configuration.addEntryPoint( "/chart", BarChartDemo.class, null );
   }
 }

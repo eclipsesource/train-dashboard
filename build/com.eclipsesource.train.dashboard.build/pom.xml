@@ -33,6 +33,7 @@
 	<modules>
 		<module>../../com.eclipsesource.train.dashboard.model</module>
 		<module>../../com.eclipsesource.train.dashboard</module>
+		<module>../../com.eclipsesource.train.dashboard.ui.chart</module>
 		<module>../../com.eclipsesource.train.dashboard.ui</module>
 		<module>../../com.eclipsesource.train.dashboard.test</module>
 		<module>../com.eclipsesource.train.dashboard.feature</module>

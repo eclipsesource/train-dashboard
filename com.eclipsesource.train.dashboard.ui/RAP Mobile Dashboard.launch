@@ -21,5 +21,5 @@
 <booleanAttribute key="tracing" value="false"/>
 <booleanAttribute key="useCustomFeatures" value="false"/>
 <booleanAttribute key="useDefaultConfigArea" value="true"/>
-<stringAttribute key="workspace_bundles" value="com.eclipsesource.rap.mobile@2:default,com.eclipsesource.train.dashboard.model@default:default,com.eclipsesource.train.dashboard.ui@default:default,com.eclipsesource.train.dashboard@3:default,org.eclipse.rap.rwt.osgi@default:default,org.eclipse.rap.rwt@default:default"/>
+<stringAttribute key="workspace_bundles" value="com.eclipsesource.rap.mobile@2:default,com.eclipsesource.train.dashboard.model@default:default,com.eclipsesource.train.dashboard.ui.chart@default:default,com.eclipsesource.train.dashboard.ui@default:default,com.eclipsesource.train.dashboard@3:default,org.eclipse.rap.rwt.osgi@default:default,org.eclipse.rap.rwt@default:default"/>
 </launchConfiguration>
