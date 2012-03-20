@@ -183,7 +183,7 @@ public class EntryPoint implements IEntryPoint {
     lblDigits.setFont( font );
     lblDigits.setForeground( new Color( result.getDisplay(), 200, 0, 0 ) );
     lblDigits.setText( "---" );
-    Label lblTitle = new Label( result, SWT.CENTER );
+    final Label lblTitle = new Label( result, SWT.CENTER );
     GridDataFactory.fillDefaults()
       .align( SWT.FILL, SWT.FILL )
       .grab( true, false )
@@ -201,23 +201,48 @@ public class EntryPoint implements IEntryPoint {
         switch( dataView ) {
           case Overview:
             lblDigits.setText( "---" );
+            lblDigits.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 200 ) );
+            lblTitle.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 200 ) );
           break;
           case AvrgDelay:
-            lblDigits.setText( String.valueOf( info.getDelayInfo().getAverageDelayMinutes() ) );
+            int averageDelayMinutes = info.getDelayInfo().getAverageDelayMinutes();
+            lblDigits.setText( String.valueOf( averageDelayMinutes ) );
+            if( averageDelayMinutes >= 15 ) {
+              lblDigits.setForeground( new Color( lblDigits.getDisplay(), 200, 0, 0 ) );
+              lblTitle.setForeground( new Color( lblDigits.getDisplay(), 200, 0, 0 ) );
+            } else {
+              lblDigits.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 0 ) );
+              lblTitle.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 0 ) );
+            }
           break;
           case MaxDelay:
-            lblDigits.setText( String.valueOf( info.getDelayInfo().getMaximumDelayMinutes() ) );
+            int maximumDelayMinutes = info.getDelayInfo().getMaximumDelayMinutes();
+            lblDigits.setText( String.valueOf( maximumDelayMinutes ) );
+            if( maximumDelayMinutes >= 120 ) {
+              lblDigits.setForeground( new Color( lblDigits.getDisplay(), 200, 0, 0 ) );
+              lblTitle.setForeground( new Color( lblDigits.getDisplay(), 200, 0, 0 ) );
+            } else {
+              lblDigits.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 0 ) );
+              lblTitle.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 0 ) );
+            }
           break;
           case Trains:
             lblDigits.setText( String.valueOf( info.getAllTrains().size() ) );
+            lblDigits.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 200 ) );
+            lblTitle.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 200 ) );
           break;
           case Stations:
             lblDigits.setText( String.valueOf( info.getAllStations().size() ) );
+            lblDigits.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 200 ) );
+            lblTitle.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 200 ) );
           break;
           default:
             lblDigits.setText( "---" );
+            lblDigits.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 200 ) );
+            lblTitle.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 200 ) );
           break;
         }
+        lblDigits.getParent().layout();
       }
     } );
     return result;
