@@ -215,7 +215,11 @@ public class DelayInfoImpl implements DelayInfo {
         delayAmount += delay.intValue();
       }
     }
-    avarageDelayMinutes = delayAmount / delayNumber;
+    if( delayAmount == 0 || delayNumber == 0 ) {
+      avarageDelayMinutes = 0;
+    } else {
+      avarageDelayMinutes = delayAmount / delayNumber;
+    }
   }
   
   public int getMaximumDelayMinutes() {
