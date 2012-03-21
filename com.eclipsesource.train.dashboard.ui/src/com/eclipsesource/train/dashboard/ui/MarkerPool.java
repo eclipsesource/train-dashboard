@@ -15,7 +15,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 
 
 public class MarkerPool {
@@ -28,13 +30,13 @@ public class MarkerPool {
   }
 
   public void dispose() {
-    for( Label label : pool ) {
+    for( Label label : new ArrayList<Label>(pool) ) {
       if( !label.isDisposed() ) {
         label.dispose();
         pool.remove( label );
       }
     }
-    for( Label label : used ) {
+    for( Label label : new ArrayList<Label>(used) ) {
       if( !label.isDisposed() ) {
         label.dispose();
         used.remove( label );
@@ -48,6 +50,10 @@ public class MarkerPool {
       Label result = iterator.next();
       used.add( result );
       pool.remove( result );
+      Listener[] listeners = result.getListeners( SWT.MouseDown );
+      for( Listener listener : listeners ) {
+        result.removeListener( SWT.MouseDown, listener );
+      }
       return result;
     }
     return null;

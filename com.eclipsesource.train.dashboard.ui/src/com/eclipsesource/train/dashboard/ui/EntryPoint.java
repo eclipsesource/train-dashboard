@@ -149,7 +149,6 @@ public class EntryPoint implements IEntryPoint {
       .applyTo( result );
     result.setBackground( result.getDisplay().getSystemColor( SWT.COLOR_BLACK ) );
     MouseAdapter button1Listener = new MouseAdapter() {
-
       @Override
       public void mouseUp( MouseEvent e ) {
         closeDataShell();
@@ -157,17 +156,14 @@ public class EntryPoint implements IEntryPoint {
     };
     final Composite button1 = createButton( result, DataView.Overview, button1Listener );
     button1.setBackground( new Color( result.getDisplay(), 39, 39, 39 ) );
-    button1.addMouseListener( new MouseAdapter() {
 
-      @Override
-      public void mouseUp( MouseEvent e ) {
-        closeDataShell();
-      }
-    } );
     MouseAdapter button2Listener = new MouseAdapter() {
       @Override
       public void mouseUp( MouseEvent e ) {
-        closeDataShell();
+        if( dataShell != null ) {
+          closeDataShell();
+          return;
+        }
         final Display display = button1.getDisplay();
         dataShell = new Shell( display, SWT.NO_TRIM | SWT.ON_TOP );
         int height = button1.getDisplay().getBounds().height - 49;
@@ -207,9 +203,9 @@ public class EntryPoint implements IEntryPoint {
     Composite result = new Composite( parent, SWT.NONE );
     GridDataFactory.fillDefaults().hint( 128, 128 ).applyTo( result );
     GridLayoutFactory.fillDefaults().applyTo( result );
-    final Label lblDigits = new Label( result, SWT.NONE );
+    final Label lblDigits = new Label( result, SWT.CENTER );
     GridDataFactory.fillDefaults()
-      .align( SWT.CENTER, SWT.CENTER )
+      .align( SWT.FILL, SWT.CENTER )
       .grab( true, true )
       .applyTo( lblDigits );
     Font font = FontDescriptor.createFrom( lblDigits.getFont() )
@@ -377,11 +373,10 @@ public class EntryPoint implements IEntryPoint {
 
   private void closeDataShell() {
     if( dataShell != null ) {
-      if( dataShell.isDisposed() ) {
-        dataShell = null;
-      } else {
+      if( !dataShell.isDisposed() ) {
         dataShell.close();
       }
+      dataShell = null;
     }
   }
 
