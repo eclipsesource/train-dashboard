@@ -34,8 +34,8 @@ public class CoordinatesUtil {
     double distanceY = Math.abs( topLeft.lon - bottomRight.lon );
     double latPercentage = Math.abs( topLeft.lat - toMap.lat ) / ( distanceX / 100 );
     double lonPercentage = Math.abs( toMap.lon - topLeft.lon ) / ( distanceY / 100 );
-    int x = ( int )( ( imgWidth / 100 ) * lonPercentage );
-    int y = ( int )( ( imgHeight / 100 ) * latPercentage );
+    int x = ( int )( ( imgWidth / 100.0 ) * lonPercentage );
+    int y = ( int )( ( imgHeight / 100.0 ) * latPercentage );
     return new Point( x, y );
   }
   
