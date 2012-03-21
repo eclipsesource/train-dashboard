@@ -30,7 +30,9 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -63,20 +65,21 @@ public class EntryPoint implements IEntryPoint {
   private List<IInfoListener> infoListeners = new ArrayList<IInfoListener>();
   private RailwayInfo currentInfo = null;
   private static int HISTORY = -30;
+  private Shell mainShell;
   
   public int createUI() {
     Display display = new Display();
-    Shell shell = new Shell( display, SWT.NO_TRIM );
-    shell.setBackground( shell.getDisplay().getSystemColor( SWT.COLOR_BLACK ) );
-    GridLayoutFactory.fillDefaults().spacing( 2, 2 ).numColumns( 2 ).applyTo( shell );
-    createToolbar( shell );
-    createDataArea( shell );
-    createNavigationArea( shell );
+    mainShell = new Shell( display, SWT.NO_TRIM );
+    mainShell.setBackground( mainShell.getDisplay().getSystemColor( SWT.COLOR_BLACK ) );
+    GridLayoutFactory.fillDefaults().spacing( 2, 2 ).numColumns( 2 ).applyTo( mainShell );
+    createToolbar( mainShell );
+    createDataArea( mainShell );
+    createNavigationArea( mainShell );
     DashboardAggregator aggregator = Activator.getAggregator();
     RailwayInfo info = aggregator.getInfoForDate( new Date() );
     fireInfoEvent( info );
-    shell.setMaximized( true );
-    shell.open();
+    mainShell.setMaximized( true );
+    mainShell.open();
     return 0;
   }
 
@@ -158,7 +161,7 @@ public class EntryPoint implements IEntryPoint {
       @Override
       public void mouseUp( MouseEvent e ) {
         closeDataShell();
-        Display display = button1.getDisplay();
+        final Display display = button1.getDisplay();
         dataShell = new Shell( display, SWT.NO_TRIM | SWT.ON_TOP );
         int height = button1.getDisplay().getBounds().height - 49;
         int width = button1.getDisplay().getBounds().width - 130;
@@ -167,6 +170,19 @@ public class EntryPoint implements IEntryPoint {
         dataShell.setLayout( new FillLayout() );
         createChart( dataShell, currentInfo );
         dataShell.open();
+        final Listener resizeListener = new Listener () {
+          public void handleEvent (Event e) {
+            int height = button1.getDisplay().getBounds().height - 49;
+            int width = button1.getDisplay().getBounds().width - 130;
+            dataShell.setBounds( 0, 49, width, height );
+          }
+        };
+        mainShell.addListener( SWT.Resize,  resizeListener);
+        dataShell.addDisposeListener( new DisposeListener() {
+          public void widgetDisposed( DisposeEvent event ) {
+            mainShell.removeListener( SWT.Resize,  resizeListener );
+          }
+        } );
       }
     };
     Composite button2 = createButton( result, DataView.AvrgDelay, button2Listener );
@@ -275,7 +291,7 @@ public class EntryPoint implements IEntryPoint {
     return result;
   }
 
-  private void createChart( Composite parent, RailwayInfo info ) {
+  private void createChart( final Composite parent, RailwayInfo info ) {
     DelayInfo delayInfo = info.getDelayInfo();
     final Chart chart = new Chart( parent, SWT.NONE );
     int delayedTrainsAmount5 = delayInfo.getDelayedTrainsAmount( 5 );
@@ -338,9 +354,16 @@ public class EntryPoint implements IEntryPoint {
     };
 
     addInfoListener( infoListener );
+    final Listener resizeListener = new Listener() {
+      public void handleEvent( Event event ) {
+        chart.layout();
+      }
+    };
+    parent.addListener( SWT.Resize, resizeListener );
     parent.addDisposeListener( new DisposeListener() {
       public void widgetDisposed( DisposeEvent event ) {
         removeInfoListener( infoListener );
+        parent.removeListener( SWT.Resize, resizeListener );
       }
     } );
   }
