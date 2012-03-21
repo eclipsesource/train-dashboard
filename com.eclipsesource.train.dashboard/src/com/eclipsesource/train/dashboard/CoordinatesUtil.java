@@ -10,9 +10,6 @@
  ******************************************************************************/
 package com.eclipsesource.train.dashboard;
 
-import java.awt.Point;
-
-
 public class CoordinatesUtil {
   
   public static class Coordinates {
@@ -33,12 +30,12 @@ public class CoordinatesUtil {
                                         Coordinates topLeft, 
                                         Coordinates bottomRight ) 
   {
-    double distanceX = bottomRight.lat - topLeft.lat;
-    double distanceY = topLeft.lon - topLeft.lon;
-    double latPercentage = toMap.lat / ( distanceX / 100 );
-    double lonPercentage = toMap.lon / ( distanceY / 100 );
-    int x = ( int )( ( imgWidth / 100 ) * latPercentage );
-    int y = ( int )( ( imgHeight / 100 ) * lonPercentage );
+    double distanceX = Math.abs( bottomRight.lat - topLeft.lat );
+    double distanceY = Math.abs( topLeft.lon - bottomRight.lon );
+    double latPercentage = Math.abs( topLeft.lat - toMap.lat ) / ( distanceX / 100 );
+    double lonPercentage = Math.abs( toMap.lon - topLeft.lon ) / ( distanceY / 100 );
+    int x = ( int )( ( imgWidth / 100 ) * lonPercentage );
+    int y = ( int )( ( imgHeight / 100 ) * latPercentage );
     return new Point( x, y );
   }
   

@@ -100,9 +100,16 @@ public class EntryPoint implements IEntryPoint {
 
   private void createDataArea( Shell shell ) {
     Composite result = new Composite( shell, SWT.NONE );
-    GridLayoutFactory.fillDefaults().numColumns( 1 ).applyTo( result );
+//    GridLayoutFactory.fillDefaults().numColumns( 1 ).applyTo( result );
     GridDataFactory.fillDefaults().align( SWT.FILL, SWT.FILL ).grab( true, true ).applyTo( result );
     result.setBackground( result.getDisplay().getSystemColor( SWT.COLOR_BLACK ) );
+    result.setLayout( new FillLayout() );
+    final GermanyMap map = new GermanyMap( result, SWT.NONE );
+    addInfoListener( new IInfoListener() {
+      public void newInfo( RailwayInfo info ) {
+        map.setInfo( info );
+      }
+    } );
   }
 
   private void createToolbar( Composite result ) {
