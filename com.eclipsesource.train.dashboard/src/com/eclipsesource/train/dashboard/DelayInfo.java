@@ -13,6 +13,7 @@ package com.eclipsesource.train.dashboard;
 import java.util.List;
 
 import com.eclipsesource.train.dashboard.model.Station;
+import com.eclipsesource.train.dashboard.model.Train;
 
 /**
  * All information is date specific. They are sticked to the date used in {@link DashboardAggregator}.
@@ -86,4 +87,9 @@ public interface DelayInfo {
    * Returns the percentage of delayed trains with a given minimum delay in minutes.
    */
   double getDelayedTrainsPercentage( int minDelay );
+
+  /**
+   * Returns all delayed trains for a given station.
+   */
+  List<Train> getDelayedTrainsForStation( int stationId );
 }

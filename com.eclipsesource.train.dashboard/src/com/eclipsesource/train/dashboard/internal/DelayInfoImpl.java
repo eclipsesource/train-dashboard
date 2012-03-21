@@ -37,6 +37,7 @@ public class DelayInfoImpl implements DelayInfo {
   private final ConcurrentHashMap<Integer, List<Station>> delaysByAmount;
   private final ConcurrentHashMap<Integer, List<Station>> delaysByMinutes;
   private final ConcurrentHashMap<Integer, List<Station>> delaysByPercentage;
+  private final ConcurrentHashMap<Integer, List<Train>> delayedTrainsByStation;
   private final ConcurrentHashMap<Integer, Integer> delayAmountForStations;
   private final ConcurrentHashMap<Integer, Integer> delayMinutesForStations;
   private final ConcurrentHashMap<Integer, Double> delayPercentageForStations;
@@ -54,6 +55,7 @@ public class DelayInfoImpl implements DelayInfo {
     this.delayAmountForStations = new ConcurrentHashMap<Integer, Integer>();
     this.delayMinutesForStations = new ConcurrentHashMap<Integer, Integer>();
     this.delayPercentageForStations = new ConcurrentHashMap<Integer, Double>();
+    this.delayedTrainsByStation = new ConcurrentHashMap<Integer, List<Train>>();
     this.avarageDelayMinutes = DEFAULT_VALUE;
     this.maximumDelayMinutes = DEFAULT_VALUE;
     this.delayedTrainAmounts = new ConcurrentHashMap<Integer, Integer>();
@@ -289,5 +291,34 @@ public class DelayInfoImpl implements DelayInfo {
       }
     }
     return result.doubleValue();
+  }
+  
+  public List<Train> getDelayedTrainsForStation( int stationId ) {
+    Integer key = Integer.valueOf( stationId );
+    List<Train> result = delayedTrainsByStation.get( key );
+    if( result == null ) {
+      result = doGetDelayedTrainsForStation( stationId );
+      List<Train> putResult = delayedTrainsByStation.putIfAbsent( key, result );
+      if( putResult != null ) {
+        result = putResult;
+      }
+    }
+    return result;
+  }
+
+  private List<Train> doGetDelayedTrainsForStation( int stationId ) {
+    List<Train> result;
+    result = new ArrayList<Train>();
+    List<Train> trains = DelayCalculationUtil.getTrainsForStation( stationId, date );
+    for( Train train : trains ) {
+      List<StationInfo> stations = train.getStations();
+      for( StationInfo stationInfo : stations ) {
+        if( stationInfo.getStationId() == stationId && stationInfo.getDelay() > 0 ) {
+          result.add( train );
+          break;
+        }
+      }
+    }
+    return result;
   }
 }
