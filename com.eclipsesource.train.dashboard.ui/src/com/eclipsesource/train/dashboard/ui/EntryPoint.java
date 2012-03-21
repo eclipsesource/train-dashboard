@@ -69,6 +69,9 @@ public class EntryPoint implements IEntryPoint {
   private static int HISTORY = -30;
   private Shell mainShell;
   private boolean playing = false;
+  private int digitFontSize = 56; 
+  private int otherFontSize = 30; 
+  private int minBoxHeight = 128; 
   
   public int createUI() {
     Display display = new Display();
@@ -142,11 +145,12 @@ public class EntryPoint implements IEntryPoint {
   }
 
   private void createNavigationArea( Shell shell ) {
+    adaptToDisplaySize( shell );
     Composite result = new Composite( shell, SWT.NONE );
     GridLayoutFactory.fillDefaults().spacing( 2, 2 ).applyTo( result );
     GridDataFactory.fillDefaults()
-      .hint( 128, SWT.DEFAULT )
-      .minSize( 128, SWT.DEFAULT )
+      .hint( minBoxHeight, SWT.DEFAULT )
+      .minSize( minBoxHeight, SWT.DEFAULT )
       .align( SWT.FILL, SWT.FILL )
       .grab( false, true )
       .applyTo( result );
@@ -200,6 +204,18 @@ public class EntryPoint implements IEntryPoint {
     Composite button5 = createButton( result, DataView.Stations, null );
     button5.setBackground( new Color( shell.getDisplay(), 39, 39, 39 ) );
     createPlayPause( result );
+  }
+
+  private void adaptToDisplaySize( Shell shell ) {
+    if( shell.getSize().y < 240 ) {
+      digitFontSize = 20; 
+      otherFontSize = 14; 
+      minBoxHeight = 48; 
+    } else if ( shell.getSize().y < 420 ) {
+      digitFontSize = 28; 
+      otherFontSize = 16; 
+      minBoxHeight = 72;       
+    }
   }
 
   private void createPlayPause( Composite parent ) {
@@ -256,7 +272,7 @@ public class EntryPoint implements IEntryPoint {
   private Composite createButton( Composite parent, final DataView dataView, MouseListener listener )
   {
     Composite result = new Composite( parent, SWT.NONE );
-    GridDataFactory.fillDefaults().hint( 128, 128 ).applyTo( result );
+    GridDataFactory.fillDefaults().hint( minBoxHeight, minBoxHeight ).applyTo( result );
     GridLayoutFactory.fillDefaults().applyTo( result );
     final Label lblDigits = new Label( result, SWT.CENTER );
     GridDataFactory.fillDefaults()
@@ -264,7 +280,7 @@ public class EntryPoint implements IEntryPoint {
       .grab( true, true )
       .applyTo( lblDigits );
     Font font = FontDescriptor.createFrom( lblDigits.getFont() )
-      .setHeight( 56 )
+      .setHeight( digitFontSize )
       .createFont( lblDigits.getDisplay() );
     lblDigits.setFont( font );
     lblDigits.setForeground( new Color( result.getDisplay(), 200, 0, 0 ) );
@@ -287,7 +303,7 @@ public class EntryPoint implements IEntryPoint {
         switch( dataView ) {
           case Overview:
             Font font = FontDescriptor.createFrom( lblDigits.getFont() )
-              .setHeight( 30 )
+              .setHeight( otherFontSize )
               .createFont( lblDigits.getDisplay() );
             lblDigits.setFont( font );
             Calendar cal = Calendar.getInstance();
