@@ -18,6 +18,8 @@ import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.rwt.lifecycle.IEntryPoint;
 import org.eclipse.rwt.lifecycle.WidgetUtil;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -34,6 +36,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.eclipsesource.train.dashboard.DashboardAggregator;
+import com.eclipsesource.train.dashboard.DelayInfo;
 import com.eclipsesource.train.dashboard.RailwayInfo;
 import com.eclipsesource.train.dashboard.ui.chart.Bar;
 import com.eclipsesource.train.dashboard.ui.chart.Chart;
@@ -58,6 +61,7 @@ public class EntryPoint implements IEntryPoint {
   protected Shell dataShell;
   private Date currentDate = new Date();
   private List<IInfoListener> infoListeners = new ArrayList<IInfoListener>();
+  private RailwayInfo currentInfo = null;
   private static int HISTORY = -30;
   
   public int createUI() {
@@ -65,6 +69,7 @@ public class EntryPoint implements IEntryPoint {
     Shell shell = new Shell( display, SWT.NO_TRIM );
     shell.setBackground( shell.getDisplay().getSystemColor( SWT.COLOR_BLACK ) );
     GridLayoutFactory.fillDefaults().spacing( 2, 2 ).numColumns( 2 ).applyTo( shell );
+    createToolbar( shell );
     createDataArea( shell );
     createNavigationArea( shell );
     DashboardAggregator aggregator = Activator.getAggregator();
@@ -79,7 +84,12 @@ public class EntryPoint implements IEntryPoint {
     infoListeners.add( listener );
   }
 
+  protected void removeInfoListener( IInfoListener listener ) {
+    infoListeners.remove( listener );
+  }
+
   private void fireInfoEvent( RailwayInfo info ) {
+    this.currentInfo = info;
     for( IInfoListener listener : this.infoListeners ) {
       listener.newInfo( info );
     }
@@ -90,8 +100,11 @@ public class EntryPoint implements IEntryPoint {
     GridLayoutFactory.fillDefaults().numColumns( 1 ).applyTo( result );
     GridDataFactory.fillDefaults().align( SWT.FILL, SWT.FILL ).grab( true, true ).applyTo( result );
     result.setBackground( result.getDisplay().getSystemColor( SWT.COLOR_BLACK ) );
+  }
+
+  private void createToolbar( Composite result ) {
     ToolBar toolBar = new ToolBar( result, SWT.NONE );
-    GridDataFactory.fillDefaults().grab( true, false ).align( SWT.FILL, SWT.TOP ).applyTo( toolBar );
+    GridDataFactory.fillDefaults().grab( true, false ).span( 2, 1 ).align( SWT.FILL, SWT.TOP ).applyTo( toolBar );
     ToolItem prevItem = new ToolItem( toolBar, SWT.NONE );
     prevItem.setText( "Previous" );
     prevItem.addSelectionListener( new SelectionAdapter() {
@@ -142,7 +155,6 @@ public class EntryPoint implements IEntryPoint {
       }
     } );
     MouseAdapter button2Listener = new MouseAdapter() {
-
       @Override
       public void mouseUp( MouseEvent e ) {
         closeDataShell();
@@ -153,7 +165,7 @@ public class EntryPoint implements IEntryPoint {
         dataShell.setBounds( 0, 49, width, height );
         dataShell.setBackground( display.getSystemColor( SWT.COLOR_BLACK ) );
         dataShell.setLayout( new FillLayout() );
-        createChart( dataShell );
+        createChart( dataShell, currentInfo );
         dataShell.open();
       }
     };
@@ -242,29 +254,83 @@ public class EntryPoint implements IEntryPoint {
             lblTitle.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 200 ) );
           break;
         }
+        if( lblDigits.getText() == null || lblDigits.getText().equals( "0" ) ) {
+          lblDigits.setText( "---" );
+        }
         lblDigits.getParent().layout();
       }
     } );
     return result;
   }
 
-  private void createChart( Composite parent ) {
-    Chart chart = new Chart( parent, SWT.NONE );
-    Bar b1 = new Bar( 0, 100, 40, "40%", "Versp.", new Color( parent.getDisplay(), 20, 20, 80 ) );
-    Bar b2 = new Bar( 0, 100, 100, "100%", "fast Pünktlich", new Color( parent.getDisplay(),
-                                                                        200,
-                                                                        120,
-                                                                        120 ) );
-    Bar b3 = new Bar( 0, 80, 66, "6", "Züge", new Color( parent.getDisplay(), 120, 120, 200 ) );
-    Bar b4 = new Bar( 0, 100, 37, "37%", "Anschl. erreicht", new Color( parent.getDisplay(),
-                                                                        200,
-                                                                        200,
-                                                                        200 ) );
-    chart.addBar( b1 );
-    chart.addBar( b2 );
-    chart.addBar( b3 );
-    chart.addBar( b4 );
+  private void createChart( Composite parent, RailwayInfo info ) {
+    DelayInfo delayInfo = info.getDelayInfo();
+    final Chart chart = new Chart( parent, SWT.NONE );
+    int delayedTrainsAmount5 = delayInfo.getDelayedTrainsAmount( 5 );
+    int delayedTrainsAmount10 = delayInfo.getDelayedTrainsAmount( 10 );
+    int delayedTrainsAmount15 = delayInfo.getDelayedTrainsAmount( 15 );
+    int maxAmount = Math.max( delayedTrainsAmount5, Math.max( delayedTrainsAmount10, delayedTrainsAmount15 ) );
+    maxAmount = Math.max( maxAmount, 400 );
+    double delayedTrainsPercentage5 = delayInfo.getDelayedTrainsPercentage( 5 );
+    double delayedTrainsPercentage10 = delayInfo.getDelayedTrainsPercentage( 10 );
+    double delayedTrainsPercentage15 = delayInfo.getDelayedTrainsPercentage( 15 );
+
+    Bar bar5m = new Bar( 0, maxAmount, delayedTrainsAmount5, String.valueOf( delayedTrainsAmount5 ), ">5min", new Color( parent.getDisplay(), 0, 200, 0 ) );
+    Bar bar5p = new Bar( 0, 100, delayedTrainsPercentage5, String.valueOf( Math.round( delayedTrainsPercentage5 ) ) + "%", ">5min", new Color( parent.getDisplay(), 0, 200, 0 ) );
+    Bar bar10m = new Bar( 0, maxAmount, delayedTrainsAmount10, String.valueOf( delayedTrainsAmount10 ), ">10min", new Color( parent.getDisplay(), 200, 200, 0 ) );
+    Bar bar10p = new Bar( 0, 100, delayedTrainsPercentage10, String.valueOf( Math.round( delayedTrainsPercentage10 ) ) + "%", ">10min", new Color( parent.getDisplay(), 200, 200, 0 ) );
+    Bar bar15m = new Bar( 0, maxAmount, delayedTrainsAmount15, String.valueOf( delayedTrainsAmount15 ), ">15min", new Color( parent.getDisplay(), 200, 0, 0 ) );
+    Bar bar15p = new Bar( 0, 100, delayedTrainsPercentage15, String.valueOf( Math.round( delayedTrainsPercentage15 ) ) + "%", ">15min", new Color( parent.getDisplay(), 200, 0, 0 ) );
+
+    chart.addBar( bar5m );
+    chart.addBar( bar5p );
+    chart.addBar( bar10m );
+    chart.addBar( bar10p );
+    chart.addBar( bar15m );
+    chart.addBar( bar15p );
+
     chart.layout();
+    
+    final IInfoListener infoListener = new IInfoListener() {
+      public void newInfo( RailwayInfo info ) {
+        DelayInfo delayInfo = info.getDelayInfo();
+        int delayedTrainsAmount5 = delayInfo.getDelayedTrainsAmount( 5 );
+        int delayedTrainsAmount10 = delayInfo.getDelayedTrainsAmount( 10 );
+        int delayedTrainsAmount15 = delayInfo.getDelayedTrainsAmount( 15 );
+        int maxAmount = Math.max( delayedTrainsAmount5, Math.max( delayedTrainsAmount10, delayedTrainsAmount15 ) );
+        maxAmount = Math.max( maxAmount, 400 );
+        double delayedTrainsPercentage5 = delayInfo.getDelayedTrainsPercentage( 5 );
+        double delayedTrainsPercentage10 = delayInfo.getDelayedTrainsPercentage( 10 );
+        double delayedTrainsPercentage15 = delayInfo.getDelayedTrainsPercentage( 15 );
+        
+        chart.getBar( 0 ).setMaximum( maxAmount );
+        chart.getBar( 0 ).setValue( delayedTrainsAmount5 );
+        chart.getBar( 0 ).setText( String.valueOf( delayedTrainsAmount5 ) );
+        chart.getBar( 1 ).setValue( delayedTrainsPercentage5 );
+        chart.getBar( 1 ).setText( String.valueOf( Math.round( delayedTrainsPercentage5 ) ) + "%" );
+        
+        chart.getBar( 2 ).setMaximum( maxAmount );
+        chart.getBar( 2 ).setValue( delayedTrainsAmount10 );
+        chart.getBar( 2 ).setText( String.valueOf( delayedTrainsAmount10 ) );
+        chart.getBar( 3 ).setValue( delayedTrainsPercentage10 );
+        chart.getBar( 3 ).setText( String.valueOf( Math.round( delayedTrainsPercentage10 ) ) + "%" );
+        
+        chart.getBar( 4 ).setMaximum( maxAmount );
+        chart.getBar( 4 ).setValue( delayedTrainsAmount15 );
+        chart.getBar( 4 ).setText( String.valueOf( delayedTrainsAmount15 ) );
+        chart.getBar( 5 ).setValue( delayedTrainsPercentage15 );
+        chart.getBar( 5 ).setText( String.valueOf( Math.round( delayedTrainsPercentage15 ) ) + "%" );
+        
+        chart.layout();
+      }
+    };
+
+    addInfoListener( infoListener );
+    parent.addDisposeListener( new DisposeListener() {
+      public void widgetDisposed( DisposeEvent event ) {
+        removeInfoListener( infoListener );
+      }
+    } );
   }
 
   private void closeDataShell() {
