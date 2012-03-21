@@ -212,7 +212,19 @@ public class EntryPoint implements IEntryPoint {
       public void newInfo( RailwayInfo info ) {
         switch( dataView ) {
           case Overview:
-            lblDigits.setText( "---" );
+            Font font = FontDescriptor.createFrom( lblDigits.getFont() )
+              .setHeight( 30 )
+              .createFont( lblDigits.getDisplay() );
+            lblDigits.setFont( font );
+            Calendar cal = Calendar.getInstance();
+            cal.setTime( currentDate );
+            StringBuilder dateText = new StringBuilder();
+            dateText.append( cal.get( Calendar.DAY_OF_MONTH ) );
+            dateText.append( "." );
+            dateText.append( cal.get( Calendar.MONTH ) + 1 );
+            dateText.append( ".\n" );
+            dateText.append( cal.get( Calendar.YEAR ) );
+            lblDigits.setText( dateText.toString() );
             lblDigits.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 200 ) );
             lblTitle.setForeground( new Color( lblDigits.getDisplay(), 0, 200, 200 ) );
           break;
@@ -349,7 +361,7 @@ public class EntryPoint implements IEntryPoint {
     
     Calendar cal = Calendar.getInstance();
     cal.setTime( currentDate );
-    cal.roll( Calendar.DATE, delta );
+    cal.add( Calendar.DATE, delta );
     if( cal.after( calToday ) ) {
       cal.add( Calendar.DATE, HISTORY );
     }
