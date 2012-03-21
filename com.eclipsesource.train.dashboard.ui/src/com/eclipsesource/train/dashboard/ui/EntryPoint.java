@@ -16,6 +16,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.rwt.lifecycle.IEntryPoint;
+import org.eclipse.rwt.lifecycle.UICallBack;
 import org.eclipse.rwt.lifecycle.WidgetUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -27,6 +28,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -66,6 +68,7 @@ public class EntryPoint implements IEntryPoint {
   private RailwayInfo currentInfo = null;
   private static int HISTORY = -30;
   private Shell mainShell;
+  private boolean playing = false;
   
   public int createUI() {
     Display display = new Display();
@@ -196,6 +199,58 @@ public class EntryPoint implements IEntryPoint {
     button4.setBackground( new Color( shell.getDisplay(), 55, 55, 55 ) );
     Composite button5 = createButton( result, DataView.Stations, null );
     button5.setBackground( new Color( shell.getDisplay(), 39, 39, 39 ) );
+    createPlayPause( result );
+  }
+
+  private void createPlayPause( Composite parent ) {
+    final Label button = new Label(parent, SWT.CENTER);
+    GridDataFactory.fillDefaults().align( SWT.CENTER, SWT.BOTTOM).grab( false, true ).applyTo( button );
+    button.setSize( 32, 32 );
+    final Image playImage = new Image(parent.getDisplay(), EntryPoint.class.getResourceAsStream( "/images/play.png" ));
+    final Image pauseImage = new Image(button.getDisplay(), EntryPoint.class.getResourceAsStream( "/images/pause.png" ));
+    button.setImage( playImage );
+    button.addMouseListener( new MouseAdapter() {
+      public void mouseUp(MouseEvent e) {
+        playing = !playing;
+        if( playing ) {
+          button.setImage( pauseImage );
+        } else {
+          button.setImage( playImage );
+        }
+        if( playing ) {
+          UICallBack.activate("playing");
+          new Thread() {
+            @Override
+            public void run() {
+              while (playing) {
+                if (button.isDisposed()) {
+                  break;
+                }
+                button.getDisplay().asyncExec(new Runnable() {
+                  public void run() {
+                    if ( button.isDisposed()) {
+                      return;
+                    }
+                    rollToInfo( 1 );
+                  }
+                });
+                try {
+                  Thread.sleep(2000);
+                } catch (Throwable th) {
+                }
+              }
+              button.getDisplay().asyncExec(new Runnable() {
+                public void run() {
+                  UICallBack.deactivate("playing");
+                }
+              });
+              
+            }
+          }.start();
+
+        }
+      }
+    } );
   }
 
   private Composite createButton( Composite parent, final DataView dataView, MouseListener listener )

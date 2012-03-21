@@ -41,10 +41,8 @@ public class GermanyMap extends Composite {
   }
 
   private void createBackground() {
-    final Shell shell = this.getShell();
     setBGImage();
-    shell.addListener( SWT.Resize, new Listener() {
-
+    this.addListener( SWT.Resize, new Listener() {
       public void handleEvent( Event e ) {
         setBGImage();
       }
