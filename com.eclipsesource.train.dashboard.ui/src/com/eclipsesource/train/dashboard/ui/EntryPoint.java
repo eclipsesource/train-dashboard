@@ -71,7 +71,7 @@ public class EntryPoint implements IEntryPoint {
   private boolean playing = false;
   private int digitFontSize = 56; 
   private int otherFontSize = 30; 
-  private int minBoxHeight = 128; 
+  private int minBoxSize = 128; 
   
   public int createUI() {
     Display display = new Display();
@@ -149,15 +149,15 @@ public class EntryPoint implements IEntryPoint {
     Composite result = new Composite( shell, SWT.NONE );
     GridLayoutFactory.fillDefaults().spacing( 2, 2 ).applyTo( result );
     GridDataFactory.fillDefaults()
-      .hint( minBoxHeight, SWT.DEFAULT )
-      .minSize( minBoxHeight, SWT.DEFAULT )
+      .hint( minBoxSize, SWT.DEFAULT )
+      .minSize( minBoxSize, SWT.DEFAULT )
       .align( SWT.FILL, SWT.FILL )
       .grab( false, true )
       .applyTo( result );
     result.setBackground( result.getDisplay().getSystemColor( SWT.COLOR_BLACK ) );
     MouseAdapter button1Listener = new MouseAdapter() {
       @Override
-      public void mouseUp( MouseEvent e ) {
+      public void mouseDown( MouseEvent e ) {
         closeDataShell();
       }
     };
@@ -166,7 +166,7 @@ public class EntryPoint implements IEntryPoint {
 
     MouseAdapter button2Listener = new MouseAdapter() {
       @Override
-      public void mouseUp( MouseEvent e ) {
+      public void mouseDown( MouseEvent e ) {
         if( dataShell != null ) {
           closeDataShell();
           return;
@@ -174,7 +174,7 @@ public class EntryPoint implements IEntryPoint {
         final Display display = button1.getDisplay();
         dataShell = new Shell( display, SWT.NO_TRIM | SWT.ON_TOP );
         int height = button1.getDisplay().getBounds().height - 49;
-        int width = button1.getDisplay().getBounds().width - 130;
+        int width = button1.getDisplay().getBounds().width - minBoxSize -2;
         dataShell.setBounds( 0, 49, width, height );
         dataShell.setBackground( display.getSystemColor( SWT.COLOR_BLACK ) );
         dataShell.setLayout( new FillLayout() );
@@ -183,14 +183,16 @@ public class EntryPoint implements IEntryPoint {
         final Listener resizeListener = new Listener () {
           public void handleEvent (Event e) {
             int height = button1.getDisplay().getBounds().height - 49;
-            int width = button1.getDisplay().getBounds().width - 130;
+            int width = button1.getDisplay().getBounds().width - minBoxSize -2;
             dataShell.setBounds( 0, 49, width, height );
           }
         };
         mainShell.addListener( SWT.Resize,  resizeListener);
         dataShell.addDisposeListener( new DisposeListener() {
           public void widgetDisposed( DisposeEvent event ) {
-            mainShell.removeListener( SWT.Resize,  resizeListener );
+            if( !mainShell.isDisposed() ) {
+              mainShell.removeListener( SWT.Resize, resizeListener );
+            }
           }
         } );
       }
@@ -210,11 +212,11 @@ public class EntryPoint implements IEntryPoint {
     if( shell.getSize().y < 240 ) {
       digitFontSize = 20; 
       otherFontSize = 14; 
-      minBoxHeight = 48; 
+      minBoxSize = 48; 
     } else if ( shell.getSize().y < 420 ) {
       digitFontSize = 28; 
       otherFontSize = 16; 
-      minBoxHeight = 72;       
+      minBoxSize = 72;       
     }
   }
 
@@ -226,7 +228,7 @@ public class EntryPoint implements IEntryPoint {
     final Image pauseImage = new Image(button.getDisplay(), EntryPoint.class.getResourceAsStream( "/images/pause.png" ));
     button.setImage( playImage );
     button.addMouseListener( new MouseAdapter() {
-      public void mouseUp(MouseEvent e) {
+      public void mouseDown(MouseEvent e) {
         playing = !playing;
         if( playing ) {
           button.setImage( pauseImage );
@@ -238,11 +240,12 @@ public class EntryPoint implements IEntryPoint {
           new Thread() {
             @Override
             public void run() {
+              Display display = button.getDisplay();
               while (playing) {
                 if (button.isDisposed()) {
                   break;
                 }
-                button.getDisplay().asyncExec(new Runnable() {
+                display.asyncExec(new Runnable() {
                   public void run() {
                     if ( button.isDisposed()) {
                       return;
@@ -255,12 +258,13 @@ public class EntryPoint implements IEntryPoint {
                 } catch (Throwable th) {
                 }
               }
-              button.getDisplay().asyncExec(new Runnable() {
-                public void run() {
-                  UICallBack.deactivate("playing");
-                }
-              });
-              
+              if( !display.isDisposed() ) {
+                display.asyncExec(new Runnable() {
+                  public void run() {
+                    UICallBack.deactivate("playing");
+                  }
+                });
+              }
             }
           }.start();
 
@@ -272,7 +276,7 @@ public class EntryPoint implements IEntryPoint {
   private Composite createButton( Composite parent, final DataView dataView, MouseListener listener )
   {
     Composite result = new Composite( parent, SWT.NONE );
-    GridDataFactory.fillDefaults().hint( minBoxHeight, minBoxHeight ).applyTo( result );
+    GridDataFactory.fillDefaults().hint( minBoxSize, minBoxSize ).applyTo( result );
     GridLayoutFactory.fillDefaults().applyTo( result );
     final Label lblDigits = new Label( result, SWT.CENTER );
     GridDataFactory.fillDefaults()
