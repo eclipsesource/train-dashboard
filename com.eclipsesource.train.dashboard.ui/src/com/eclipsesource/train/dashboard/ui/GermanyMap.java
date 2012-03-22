@@ -101,8 +101,8 @@ public class GermanyMap extends Composite {
         int width = 280;
         int height = 130;
         org.eclipse.swt.graphics.Point touchPoint = getDisplay().map( (Control)event.widget, null, event.x, event.y );
-        int x = Math.min( touchPoint.x, getDisplay().getBounds().width -width -1);
-        int y = Math.max( 0, touchPoint.y -128);
+        int x = Math.max( 1, Math.min( touchPoint.x, getDisplay().getBounds().width -width -1) );
+        int y = Math.max( 1, touchPoint.y -128);
         dialog.setBounds( x, y, width, height );
         dialog.setBackground( getDisplay().getSystemColor( SWT.COLOR_BLACK ) );
         dialog.setText( station.getName() );
