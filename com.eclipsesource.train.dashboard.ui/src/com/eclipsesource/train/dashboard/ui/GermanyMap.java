@@ -36,7 +36,7 @@ public class GermanyMap extends Composite {
 
   public GermanyMap( Composite parent, int style ) {
     super( parent, style );
-    markerImage = new Image( this.getDisplay(), GermanyMap.class.getResourceAsStream( "/images/marker_red.png" ) );
+    markerImage = new Image( this.getDisplay(), GermanyMap.class.getResourceAsStream( "/images/marker_white.png" ) );
     createBackground();
   }
 

@@ -379,12 +379,12 @@ public class EntryPoint implements IEntryPoint {
     double delayedTrainsPercentage10 = delayInfo.getDelayedTrainsPercentage( 10 );
     double delayedTrainsPercentage15 = delayInfo.getDelayedTrainsPercentage( 15 );
 
-    Bar bar5m = new Bar( 0, maxAmount, delayedTrainsAmount5, String.valueOf( delayedTrainsAmount5 ), ">5min", new Color( parent.getDisplay(), 0, 200, 0 ) );
-    Bar bar5p = new Bar( 0, 100, delayedTrainsPercentage5, String.valueOf( Math.round( delayedTrainsPercentage5 ) ) + "%", ">5min", new Color( parent.getDisplay(), 0, 200, 0 ) );
-    Bar bar10m = new Bar( 0, maxAmount, delayedTrainsAmount10, String.valueOf( delayedTrainsAmount10 ), ">10min", new Color( parent.getDisplay(), 200, 200, 0 ) );
-    Bar bar10p = new Bar( 0, 100, delayedTrainsPercentage10, String.valueOf( Math.round( delayedTrainsPercentage10 ) ) + "%", ">10min", new Color( parent.getDisplay(), 200, 200, 0 ) );
-    Bar bar15m = new Bar( 0, maxAmount, delayedTrainsAmount15, String.valueOf( delayedTrainsAmount15 ), ">15min", new Color( parent.getDisplay(), 200, 0, 0 ) );
-    Bar bar15p = new Bar( 0, 100, delayedTrainsPercentage15, String.valueOf( Math.round( delayedTrainsPercentage15 ) ) + "%", ">15min", new Color( parent.getDisplay(), 200, 0, 0 ) );
+    Bar bar5m = new Bar( 0, maxAmount, delayedTrainsAmount5, String.valueOf( delayedTrainsAmount5 ), ">5min", new Color( parent.getDisplay(), 8, 196, 237 ) );
+    Bar bar5p = new Bar( 0, 100, delayedTrainsPercentage5, String.valueOf( Math.round( delayedTrainsPercentage5 ) ) + "%", ">5min", new Color( parent.getDisplay(), 8, 196, 237 ) );
+    Bar bar10m = new Bar( 0, maxAmount, delayedTrainsAmount10, String.valueOf( delayedTrainsAmount10 ), ">10min", new Color( parent.getDisplay(), 193, 248, 0 ) );
+    Bar bar10p = new Bar( 0, 100, delayedTrainsPercentage10, String.valueOf( Math.round( delayedTrainsPercentage10 ) ) + "%", ">10min", new Color( parent.getDisplay(), 193, 248, 0 ) );
+    Bar bar15m = new Bar( 0, maxAmount, delayedTrainsAmount15, String.valueOf( delayedTrainsAmount15 ), ">15min", new Color( parent.getDisplay(), 212, 29, 219 ) );
+    Bar bar15p = new Bar( 0, 100, delayedTrainsPercentage15, String.valueOf( Math.round( delayedTrainsPercentage15 ) ) + "%", ">15min", new Color( parent.getDisplay(), 212, 29, 219 ) );
 
     chart.addBar( bar5m );
     chart.addBar( bar5p );
