@@ -129,11 +129,9 @@ public class EntryPoint implements IEntryPoint {
         rollToInfo(-1);
       }
     } );
-    new ToolItem( toolBar, SWT.SEPARATOR );
     ToolItem titleItem = new ToolItem( toolBar, SWT.NONE );
     titleItem.setData( WidgetUtil.CUSTOM_VARIANT, "TITLE" );
     titleItem.setText( "Train Dashboard" );
-    new ToolItem( toolBar, SWT.SEPARATOR );
     ToolItem nextItem = new ToolItem( toolBar, SWT.NONE );
     nextItem.setText( "Next" );
     nextItem.addSelectionListener( new SelectionAdapter() {
