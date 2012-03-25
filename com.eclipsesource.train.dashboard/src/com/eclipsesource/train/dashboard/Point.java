@@ -1,5 +1,7 @@
 package com.eclipsesource.train.dashboard;
 
+import java.awt.Rectangle;
+
 /**
  * Instances of this class represent places on the (x, y)
  * coordinate plane.

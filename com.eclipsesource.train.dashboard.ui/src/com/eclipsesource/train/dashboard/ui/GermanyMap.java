@@ -8,7 +8,9 @@
 package com.eclipsesource.train.dashboard.ui;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.eclipse.rwt.graphics.Graphics;
 import org.eclipse.rwt.lifecycle.WidgetUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -32,11 +34,18 @@ public class GermanyMap extends Composite {
 
   private MarkerPool markerPool = new MarkerPool();
   private RailwayInfo currentInfo;
-  private Image markerImage;
-
+  private static final Image markerImage;
+  private static final ConcurrentHashMap<ScaledImageKey, Image> scaledImages;
+  private static final ImageData gemranyMapData;
+  
+  static {
+    markerImage = Graphics.getImage( "/images/marker_white.png", GermanyMap.class.getClassLoader() ); 
+    gemranyMapData = new ImageData( GermanyMap.class.getResourceAsStream( "/images/germany.png" ) );
+    scaledImages = new ConcurrentHashMap<ScaledImageKey, Image>();
+  }
+  
   public GermanyMap( Composite parent, int style ) {
     super( parent, style );
-    markerImage = new Image( this.getDisplay(), GermanyMap.class.getResourceAsStream( "/images/marker_white.png" ) );
     createBackground();
   }
 
@@ -53,10 +62,16 @@ public class GermanyMap extends Composite {
     int newWidth = this.getSize().x;
     int newHeight = this.getSize().y;
     if( newWidth > 0 && newHeight > 0 ) {
-      // && ( width != newWidth || height != newHeight )
-      ImageData imageData = new ImageData( GermanyMap.class.getResourceAsStream( "/images/germany.png" ) );
-      imageData = imageData.scaledTo( newWidth, newHeight );
-      Image image = new Image( this.getDisplay(), imageData );
+      ScaledImageKey key = new ScaledImageKey( newWidth, newHeight );
+      Image image = scaledImages.get( key );
+      if( image == null ) {
+        ImageData scaledData = gemranyMapData.scaledTo( newWidth, newHeight );
+        image = new Image( this.getDisplay(), scaledData );
+        Image putResult = scaledImages.putIfAbsent( key, image );
+        if( putResult != null ) {
+          image = putResult;
+        }
+      }
       this.setBackgroundImage( image );
       setInfo( currentInfo );
     }
