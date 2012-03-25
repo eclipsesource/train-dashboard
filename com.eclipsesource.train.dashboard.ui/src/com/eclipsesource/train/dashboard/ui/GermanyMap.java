@@ -95,7 +95,7 @@ public class GermanyMap extends Composite {
       markerPool.addMarker( marker );
     }
     marker.setImage( markerImage );
-    marker.setLocation( Math.max( 0, location.x -11), Math.max( 0, location.y -32 ) );
+    marker.setLocation( Math.max( 0, location.x -8), Math.max( 0, location.y -30 ) );
     marker.setSize( 32, 32 );
     marker.addListener( SWT.MouseDown, new Listener() {
       public void handleEvent( Event event ) {
