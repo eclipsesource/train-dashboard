@@ -33,14 +33,14 @@ public class MarkerPool {
     for( Label label : new ArrayList<Label>(pool) ) {
       if( !label.isDisposed() ) {
         label.dispose();
-        pool.remove( label );
       }
+      pool.remove( label );
     }
     for( Label label : new ArrayList<Label>(used) ) {
       if( !label.isDisposed() ) {
         label.dispose();
-        used.remove( label );
       }
+      used.remove( label );
     }
   }
 
@@ -63,8 +63,8 @@ public class MarkerPool {
     for( Label label : new ArrayList<Label>(pool) ) {
       if( !label.isDisposed() ) {
         label.dispose();
-        pool.remove( label );
       }
+      pool.remove( label );
     }
     pool.addAll( used );
     used.clear();
