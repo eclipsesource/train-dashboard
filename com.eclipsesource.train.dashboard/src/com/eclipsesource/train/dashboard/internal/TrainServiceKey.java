@@ -24,7 +24,7 @@ public class TrainServiceKey {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime( date );
     year = calendar.get( Calendar.YEAR );
-    month = calendar.get( Calendar.MONTH );
+    month = calendar.get( Calendar.MONTH ) + 1;
     day = calendar.get( Calendar.DAY_OF_MONTH );
     ensureValidKey();
   }
@@ -34,7 +34,7 @@ public class TrainServiceKey {
     calendar.setTime( new Date() );
     int currentYear = calendar.get( Calendar.YEAR );
     int currentMonth = calendar.get( Calendar.MONTH );
-    int currentDay = calendar.get( Calendar.DAY_OF_MONTH );
+    int currentDay = calendar.get( Calendar.DAY_OF_MONTH ) + 1;
     if( year == currentYear && month == currentMonth && day > currentDay ) {
       throw new IllegalArgumentException( "Could not create key for future dates" );
     }
