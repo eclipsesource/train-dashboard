@@ -66,12 +66,12 @@ public class EntryPoint implements IEntryPoint {
   private Date currentDate = new Date();
   private List<IInfoListener> infoListeners = new ArrayList<IInfoListener>();
   private RailwayInfo currentInfo = null;
-  private static int HISTORY = -30;
   private Shell mainShell;
   private boolean playing = false;
   private int digitFontSize = 56; 
   private int otherFontSize = 30; 
-  private int minBoxSize = 128; 
+  private int minBoxSize = 128;
+  private ToolBar toolBar; 
   
   public int createUI() {
     Display display = new Display();
@@ -118,7 +118,7 @@ public class EntryPoint implements IEntryPoint {
   }
 
   private void createToolbar( Composite result ) {
-    ToolBar toolBar = new ToolBar( result, SWT.NONE );
+    toolBar = new ToolBar( result, SWT.NONE );
     GridDataFactory.fillDefaults().grab( true, false ).span( 2, 1 ).align( SWT.FILL, SWT.TOP ).applyTo( toolBar );
     ToolItem prevItem = new ToolItem( toolBar, SWT.NONE );
     prevItem.setText( "Previous" );
@@ -170,18 +170,18 @@ public class EntryPoint implements IEntryPoint {
         }
         final Display display = button1.getDisplay();
         dataShell = new Shell( display, SWT.NO_TRIM | SWT.ON_TOP );
-        int height = button1.getDisplay().getBounds().height - 49;
+        int height = button1.getDisplay().getBounds().height - toolBar.getSize().y;
         int width = button1.getDisplay().getBounds().width - minBoxSize -2;
-        dataShell.setBounds( 0, 49, width, height );
+        dataShell.setBounds( 0, toolBar.getSize().y, width, height );
         dataShell.setBackground( display.getSystemColor( SWT.COLOR_BLACK ) );
         dataShell.setLayout( new FillLayout() );
         createChart( dataShell, currentInfo );
         dataShell.open();
         final Listener resizeListener = new Listener () {
           public void handleEvent (Event e) {
-            int height = button1.getDisplay().getBounds().height - 49;
+            int height = button1.getDisplay().getBounds().height - toolBar.getSize().y;
             int width = button1.getDisplay().getBounds().width - minBoxSize -2;
-            dataShell.setBounds( 0, 49, width, height );
+            dataShell.setBounds( 0, toolBar.getSize().y, width, height );
           }
         };
         mainShell.addListener( SWT.Resize,  resizeListener);
@@ -458,9 +458,9 @@ public class EntryPoint implements IEntryPoint {
     
     Calendar cal = Calendar.getInstance();
     cal.setTime( currentDate );
-    cal.add( Calendar.DATE, delta );
+    cal.add( Calendar.DAY_OF_MONTH, delta );
     if( cal.after( calToday ) ) {
-      cal.add( Calendar.DATE, HISTORY );
+      cal.add( Calendar.MONTH, -1);
     }
     this.currentDate = cal.getTime();
     DashboardAggregator aggregator = Activator.getAggregator();
