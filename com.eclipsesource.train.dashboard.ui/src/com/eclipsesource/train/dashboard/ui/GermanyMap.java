@@ -126,18 +126,18 @@ public class GermanyMap extends Composite {
                                                                       null,
                                                                       event.x,
                                                                       event.y );
-        dialog.setBackground( getDisplay().getSystemColor( SWT.COLOR_GRAY ) );
         dialog.setText( station.getName() );
-        dialog.setLayout( new FillLayout() );
+        FillLayout layout = new FillLayout();
+        layout.marginHeight = 8;
+        layout.marginWidth = 16;
+        dialog.setLayout( layout );
         Label messageLabel = new Label( dialog, SWT.WRAP );
-        String messageText = message.toString();
+        String messageText = message.toString().trim();
         messageLabel.setText( messageText );
-        messageLabel.setForeground( getDisplay().getSystemColor( SWT.COLOR_BLACK ) );
-        int width = dialog.getBounds().width;
-        int height = dialog.getBounds().height;
-        int x = Math.max( 1, Math.min( touchPoint.x, getDisplay().getBounds().width - width - 1 ) );
-        int y = Math.max( 1, touchPoint.y - 128 );
-        dialog.setBounds( x, y, width, height );
+        dialog.pack();
+        int x = Math.max( 1, Math.min( touchPoint.x, getDisplay().getBounds().width -dialog.getSize().x -1) );
+        int y = Math.max( 1, touchPoint.y - dialog.getSize().y);
+        dialog.setLocation( x, y );
         dialog.open();
       }
     } );
