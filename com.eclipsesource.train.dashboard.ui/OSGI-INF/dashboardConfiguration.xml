@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="dashboardConfiguration">
+   <implementation class="com.eclipsesource.train.dashboard.ui.DashboardConfiguration"/>
+   <service>
+      <provide interface="org.eclipse.rwt.application.ApplicationConfiguration"/>
+   </service>
+</scr:component>

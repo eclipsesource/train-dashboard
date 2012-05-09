@@ -10,14 +10,14 @@
  ******************************************************************************/
 package com.eclipsesource.train.dashboard.ui;
 
+import org.eclipse.rwt.application.Application;
 import org.eclipse.rwt.application.ApplicationConfiguration;
-import org.eclipse.rwt.application.ApplicationConfigurator;
 
 
-public class DashboardConfigurator implements ApplicationConfigurator {
+public class DashboardConfiguration implements ApplicationConfiguration {
 
-  public void configure( ApplicationConfiguration configuration ) {
-    configuration.addEntryPoint( "/dashboard", EntryPoint.class, null );
-    configuration.addEntryPoint( "/chart", BarChartDemo.class, null );
+  public void configure( Application application ) {
+    application.addEntryPoint( "/dashboard", EntryPoint.class, null );
+    application.addEntryPoint( "/chart", BarChartDemo.class, null );
   }
 }
