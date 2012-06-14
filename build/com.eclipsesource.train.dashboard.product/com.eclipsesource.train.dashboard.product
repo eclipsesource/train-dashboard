@@ -28,6 +28,7 @@
    </features>
 
    <configurations>
+      <plugin id="com.eclipsesource.tabris" autoStart="true" startLevel="2" />
       <plugin id="com.eclipsesource.train.dashboard" autoStart="true" startLevel="3" />
       <plugin id="com.eclipsesource.train.dashboard.model" autoStart="true" startLevel="0" />
       <plugin id="com.eclipsesource.train.dashboard.ui" autoStart="true" startLevel="0" />

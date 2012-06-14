@@ -49,12 +49,12 @@
     <repository>
       <id>orbit</id>
       <layout>p2</layout>
-      <url>http://download.eclipse.org/tools/orbit/downloads/drops/S20120308061416/repository/</url>
+      <url>http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/</url>
     </repository>
     <repository>
       <id>rap-mobile-nightly-repository</id>
       <layout>p2</layout>
-      <url>http://download.eclipsesource.com/build/rap-mobile/1.0.0</url>
+      <url>http://download.eclipsesource.com/build/tabris/0.6.0</url>
     </repository>
     <repository>
       <id>eclipse-milestones</id>
