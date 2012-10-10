@@ -10,8 +10,8 @@
  ******************************************************************************/
 package com.eclipsesource.train.dashboard.ui;
 
-import org.eclipse.rwt.application.Application;
-import org.eclipse.rwt.application.ApplicationConfiguration;
+import org.eclipse.rap.rwt.application.Application;
+import org.eclipse.rap.rwt.application.ApplicationConfiguration;
 
 
 public class DashboardConfiguration implements ApplicationConfiguration {

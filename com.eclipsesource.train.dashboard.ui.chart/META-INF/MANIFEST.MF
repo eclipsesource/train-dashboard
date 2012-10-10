@@ -4,7 +4,7 @@ Bundle-Name: Chart Widgets
 Bundle-SymbolicName: com.eclipsesource.train.dashboard.ui.chart
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: EclipseSource
-Require-Bundle: org.eclipse.rap.rwt;bundle-version="[1.5.0,2.0.0)"
+Require-Bundle: org.eclipse.rap.rwt;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.eclipsesource.train.dashboard.ui.chart;version="1.0.0"
 Bundle-ActivationPolicy: lazy

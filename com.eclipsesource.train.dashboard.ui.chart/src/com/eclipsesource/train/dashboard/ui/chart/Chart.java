@@ -13,7 +13,7 @@ package com.eclipsesource.train.dashboard.ui.chart;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.rwt.lifecycle.WidgetUtil;
+import org.eclipse.rap.rwt.RWT;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -48,10 +48,10 @@ public class Chart extends Composite {
 		bars.add(bar);
 		Composite comp = new Composite( barComposite, SWT.NONE );
 		comp.setBackground( bar.getColor() );
-		comp.setData(WidgetUtil.CUSTOM_VARIANT, "ANIMATED");
+		comp.setData(RWT.CUSTOM_VARIANT, "ANIMATED");
 		barComposites.add(comp);
 		Label value = new Label( barComposite, SWT.CENTER );
-		value.setData(WidgetUtil.CUSTOM_VARIANT, "ANIMATED");
+		value.setData(RWT.CUSTOM_VARIANT, "ANIMATED");
 		value.setForeground( this.getDisplay().getSystemColor( SWT.COLOR_WHITE ) );
 		values.add(value);
 		Label description = new Label( descriptionComposite, SWT.CENTER );

@@ -10,8 +10,8 @@ package com.eclipsesource.train.dashboard.ui;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclipse.rwt.graphics.Graphics;
-import org.eclipse.rwt.lifecycle.WidgetUtil;
+import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.graphics.Graphics;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -96,7 +96,7 @@ public class GermanyMap extends Composite {
     Label marker = markerPool.getMarker();
     if( marker == null ) {
       marker = new Label( this, SWT.NONE );
-      marker.setData( WidgetUtil.CUSTOM_VARIANT, "ANIMATED" );
+      marker.setData( RWT.CUSTOM_VARIANT, "ANIMATED" );
       markerPool.addMarker( marker );
     }
     marker.setImage( markerImage );

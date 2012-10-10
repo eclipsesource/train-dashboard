@@ -15,9 +15,9 @@ import java.util.List;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.FontDescriptor;
-import org.eclipse.rwt.lifecycle.IEntryPoint;
-import org.eclipse.rwt.lifecycle.UICallBack;
-import org.eclipse.rwt.lifecycle.WidgetUtil;
+import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.lifecycle.IEntryPoint;
+import org.eclipse.rap.rwt.lifecycle.UICallBack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -129,7 +129,7 @@ public class EntryPoint implements IEntryPoint {
       }
     } );
     ToolItem titleItem = new ToolItem( toolBar, SWT.NONE );
-    titleItem.setData( WidgetUtil.CUSTOM_VARIANT, "TITLE" );
+    titleItem.setData( RWT.CUSTOM_VARIANT, "TITLE" );
     titleItem.setText( "Train Dashboard" );
     ToolItem nextItem = new ToolItem( toolBar, SWT.NONE );
     nextItem.setText( "Next" );
